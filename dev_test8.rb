@@ -142,7 +142,8 @@ def grab_a_question                                   # Called by the Flashcard 
 end
 
 def grab_many_questions                               # Called by the Multiple Choice Test
-  @Q_n_A_array = []           # an empty array that will be filled array containing both questions and answers
+#  @Q_n_A_array = []           # an empty array that will be filled array containing both questions and answers
+random_number = ""  
   while @n < 20                                       # Runs the function 20 times
     while @c < 4                                      # Runs the loop 4 times
       random_number = rand(@one_test.length)          # Generates a random number based on the total # of questions
