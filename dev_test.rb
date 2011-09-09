@@ -1,5 +1,9 @@
-puts 'A test of web developer knowledge!',
-     '\n'
+title = <<TITLE
+
+  A test of web developer knowledge
+
+TITLE
+print title
 
 @n = 1                      # A variable that counts and displays which number you are on for the Flashcard Test
 @explain = {}               # A hash stores the questions and explainations for the Flashcard Test 
@@ -108,18 +112,18 @@ def choose_a_test
     choose_a_test()                                 # and the function is called again
   end
 
-  puts 'Do you want (F)lashcards or (M)ultiple-Choice'
+  puts "\n Do you want (F)lashcards or (M)ultiple-Choice"
   print '> '
   choice_input = gets.chomp.capitalize              
   c_input = choice_input[0]                         # Again only the first letter of a input string is evaluated
   
   if c_input == 'F'
     form = 'Flash Card Test'                                            
-    puts "", "<>{ () }<>  " + subject + ' ' + form + " <>{ () }<>", ""  # A decorative title bar is created
+    puts "\n\s <>{ () }<>  " + subject + ' ' + form + " <>{ () }<> \n"  # A decorative title bar is created
     flashcard_test()
   elsif c_input == 'M'
     form = 'Multiple Choice Test'
-    puts "", "<>{(| )}<>  " + subject + ' ' + form + " <>{( |)}<>"
+    puts "\n\s <>{(| )}<>  " + subject + ' ' + form + " <>{( |)}<> \n"
     multi_choice_test()
   else
     puts "I didn't understand..."
@@ -128,20 +132,29 @@ def choose_a_test
 end
 
 def info_for_flashcard_test
-  puts "", "In this test you will to explain your answers."
-  puts "For each, you will grade your explainations",
-       "\n"
-  puts "Type 'quit' to end the test early" 
-  puts "Type 'skip' to advance to the next question"
-  puts "Type 'help' to see these instructions again",
-       "\n"
+  info = <<INFO
+  
+    In this test you will to explain your answers.
+    For each, you will grade your explainations
+  
+    Type 'quit' to end the test early
+    Type 'skip' to advance to the next question
+    Type 'help' to see these instructions again
+       
+INFO
+  puts info
 end
 
 def info_for_multi_choice_test
-  puts "", "Answer 1, 2, 3, or 4 for each question"
-  puts "If you see 2 correct answers,"
-  puts "choose the one with the lower number."
-  puts "Type 'quit' to end the test early" 
+  info  = <<INFO
+
+      Answer 1, 2, 3, or 4 for each question
+      If you see 2 correct answers,
+      choose the one with the lower number.
+      Type 'quit' to end the test early.
+
+INFO
+  puts info
 end
 
 def grab_a_question                                   # Called by the Flashcard Test
@@ -157,8 +170,8 @@ def grab_many_questions       # Called by the Multiple Choice Test
   @multi_choice_array = []    # Array will be filled with 4 questions and 4 answers
   random_number = ""          # Random number between 0 and the length of the test
   q = 0                       # Counts how many symbol and description pairs have been pulled out
-  while @n < 20                                   # Runs the function 20 times
-    while q < 4                                   # Runs the loop 4 times so 4 answer choices will appear
+  while @n < 20                                     # Runs the function 20 times
+    while q < 4                                     # Runs the loop 4 times so 4 answer choices will appear
       random_number = rand(@one_test.length)
       @S_n_D_array = @one_test.slice(random_number) # Picks 1 array from the larger array
       symbol = @S_n_D_array[0]                      # Pulls 1st value which is one the multiple choice
@@ -178,14 +191,15 @@ def pose_a_question
   @n += 1                                               # The number counter is increased by 1
   get_flashcard_input()                                 # The user input is process and returned
   puts "Your answer should be something like...",       # 
-       " -> #{@aQuestion[1]}"                           # The stock answer is displayed
+       "\n -> #{@aQuestion[1]} \n"                           # The stock answer is displayed
   get_explaination()
 end
 
 def pose_a_multi_choice_question
-  print "\n", "(1) #{@multi_choice_array[1]} \s\s\t"  # The questions and answers entered the array as pairs
-  print "(2) #{@multi_choice_array[3]} \s\s\t"        # The answers came second and so they occupy the odd 
-  print "(3) #{@multi_choice_array[5]} \s\s\t"        # Index places of the multi_choice_array
+  print "\n" 
+  print "(1) #{@multi_choice_array[1]} \s\s\t"    # The questions and answers entered the array as pairs
+  print "(2) #{@multi_choice_array[3]} \s\s\t"    # The answers came second and so they occupy the odd 
+  print "(3) #{@multi_choice_array[5]} \s\s\t"    # Index places of the multi_choice_array
   print "(4) #{@multi_choice_array[7]} \n \n"
 
   number_1_to_4 = rand(4)                 # Random number is equal to 0, 1, 2, or 3. 
@@ -238,23 +252,20 @@ def get_explaination
   puts "Please write an explaination : "                     # Asks the user for input
   print "> "
   get_flashcard_input()                                      # Evaluates input to check if user wants help, to skip, or quit 
-  puts "Your explaination should be something like...",      # Provides an example explainations
-       "\n",
+  puts "Your explaination should be something like... \n",   # Provides an example explainations
        " -> #{@aQuestion[2]}"
   self_correct()                                             # Give the user a chance to self-correct
 end
 
 def self_correct
-  print "\n", "correct?  y / n  ", " > "                     # Asks the user if his/her answer was correct
+  print "\n", "correct?  y / n   > "                     # Asks the user if his/her answer was correct
   self_correct = gets.chomp                                  # Receives the user input
   if self_correct == 'y'                                     # And evaluates
-    puts "good job!", "\n"                                   # Print 'good job' 
+    puts "good job! \n"                                      # Print 'good job' 
     @correct += 1                                            # Increase correct counter by 1
   elsif self_correct == 'n'
     @one_test.push(@aQuestion)                               # If 'n' question pushed back into the test
-    print "\n", 
-          "We'll put that one back so you can try it again later \n",
-          "\n"
+    puts "\n We'll put that one back so you can try it again later \n"
   else
     puts "sorry I didn't understand that..."
     self_correct()                                           # Catches bad input asks the question again
@@ -264,7 +275,7 @@ end
 
 def finish_test
   @n -= 1                                                    # Decreases the number counter by one so last question is iqnored
-  results = "Finished! You got #{@correct} out of #{@n} answers right!"
+  results = "Finished - You got #{@correct} out of #{@n} answers right!"
   puts results                                               # Results are printed for the user
   if @explain.length < 1                                     # Multiple-Choice doens't have explainations so @explain hash is 0 
     Process.exit!(0)                                         # Multiple-Choice users are exited from the program
