@@ -66,6 +66,7 @@ print title
     ['id=','identification','marks 1 element so CSS or JS can select it', ['element', 'select', 'mark'] ],
     ['class=','classification','marks many element that can all be selected by CSS or JS', ['element', 'select', 'mark', 'many'] ],
     ['src=','source','points to the location of an internal file', ['point', 'location', 'file'] ],
+    ['alt=', 'alternative', 'gives a description of a picture', ['description', 'picture'] ],
     ['href=','hypertext reference','points to the location of an external link', ['point','location','external','link'] ]
   ],
   [                            # a sub-array containing all the Symbols_questions = 
@@ -88,8 +89,27 @@ print title
     ['//','comment','use this ONLY in CSS or JavaScript'],
     ['&','ampersand','used before strange characters'],
     ['+','plus sign','used in math AND to concatenate strings']
+  ],
+  [
+    ['**','Exponent','the preceding number is multiplied by itself the "exponent" number of times'],
+    ['%','Remainder','when the preceding number is divide by the follow number the "remainder" is the value remaining'],
+    ['+=','add to variable',''],
+    ['-=','subtract from variable',''],
+    ['*=','multiply variable by',''],
+    ['/=','divide variable by',''],
+    ['**=','multiply by itself "x" number of time',''],
+    ['%=','get remainder',''],
+    ['','',''],
+    ['','',''],
+    ['','',''],
+    ['','',''],
+    ['','',''],
+    ['','',''],
+    ['','',''],
+    ['','',''],
   ]
 ]
+
 def choose_a_test                                               
   puts 'Do you want the (H)TML, (S)YMBOLS, or (R)EGEXP test?'
   print '> '
@@ -134,12 +154,13 @@ end
 def info_for_flashcard_test
   info = <<INFO
   
-    In this test you will to explain your answers.
-    For each, you will grade your explainations
+      This test will ask you questions 
+      and ask you to explain your answers.
+      You will grade your explainations.
   
-    Type 'quit' to end the test early
-    Type 'skip' to advance to the next question
-    Type 'help' to see these instructions again
+      Type 'quit' to end the test early
+      Type 'skip' to advance to the next question
+      Type 'help' to see these instructions again
        
 INFO
   puts info
@@ -166,23 +187,27 @@ def grab_a_question                                   # Called by the Flashcard 
 end
 
 def grab_many_questions       # Called by the Multiple Choice Test
-  @S_n_D_array = []           # Array that will be filled array containing 1 symbol and 1 description
+  sym_N_des_array = []        # Array that will be filled array containing 1 symbol and 1 description
   @multi_choice_array = []    # Array will be filled with 4 questions and 4 answers
   random_number = ""          # Random number between 0 and the length of the test
-  q = 0                       # Counts how many symbol and description pairs have been pulled out
-  while @n < 20                                     # Runs the function 20 times
-    while q < 4                                     # Runs the loop 4 times so 4 answer choices will appear
+  random_array = []
+  while @n <= 20                               # Runs the function 20 times asking 20 questions
+    while random_array.length < 4           # Runs the loop until 4 unique random number are found
       random_number = rand(@one_test.length)
-      @S_n_D_array = @one_test.slice(random_number) # Picks 1 array from the larger array
-      symbol = @S_n_D_array[0]                      # Pulls 1st value which is one the multiple choice
-      description = @S_n_D_array[2]                 # Pulls 3rd value which is the question
-      @multi_choice_array.push(description)         # Questions enter the array in 0th, 2nd, 4th, & 6th places
-      @multi_choice_array.push(symbol)              # Answers enter the array in 1st, 3rd, 5th, & 7th places
-      q += 1
+      if random_array.include?(random_number)
+        random_number = rand(@one_test.length)
+      else
+        random_array.push(random_number)
+        sym_N_des_array = @one_test.slice(random_number) # Picks 1 array from the larger array
+        symbol = sym_N_des_array[0]                      # Pulls 1st value which is one the multiple choice
+        description = sym_N_des_array[2]                 # Pulls 3rd value which is the question
+        @multi_choice_array.push(description)            # Questions enter the array in 0th, 2nd, 4th, & 6th places
+        @multi_choice_array.push(symbol)                 # Answers enter the array in 1st, 3rd, 5th, & 7th places
+      end
     end
-    @n += 1
     pose_a_multi_choice_question()
   end
+  finish_test()
 end
 
 
@@ -191,17 +216,17 @@ def pose_a_question
   @n += 1                                               # The number counter is increased by 1
   get_flashcard_input()                                 # The user input is process and returned
   puts "Your answer should be something like...",       # 
-       "\n -> #{@aQuestion[1]} \n"                           # The stock answer is displayed
+       "\n -> #{@aQuestion[1]} \n \n"                           # The stock answer is displayed
   get_explaination()
 end
 
 def pose_a_multi_choice_question
-  print "\n" 
-  print "(1) #{@multi_choice_array[1]} \s\s\t"    # The questions and answers entered the array as pairs
-  print "(2) #{@multi_choice_array[3]} \s\s\t"    # The answers came second and so they occupy the odd 
-  print "(3) #{@multi_choice_array[5]} \s\s\t"    # Index places of the multi_choice_array
-  print "(4) #{@multi_choice_array[7]} \n \n"
-
+  print "(#{@n}.)\s" 
+  print "[1] #{@multi_choice_array[1]} \t\s\s\s"    # The questions and answers entered the array as pairs
+  print "[2] #{@multi_choice_array[3]} \t\s\s\s"    # The answers came second and so they occupy the odd 
+  print "[3] #{@multi_choice_array[5]} \t\s\s\s"    # Index places of the multi_choice_array
+  print "[4] #{@multi_choice_array[7]} \n \n"
+  @n += 1
   number_1_to_4 = rand(4)                 # Random number is equal to 0, 1, 2, or 3. 
   even_number = 2 * number_1_to_4         # Multiplied by 2 makes it even 0, 2, 4, or 6 and so it will select only a question
   human_number = number_1_to_4 + 1        # Plus 1 makes the number understandable to for users
@@ -218,6 +243,7 @@ def pose_a_multi_choice_question
     print "Wrong, the answer was -> "
     puts human_number, ""                 # If wrong, the correct answer is printed
   end
+  
   grab_many_questions()                   # The grab_many_questions function is called
 end                                       # Causing the a new cycle to begin
 
@@ -249,11 +275,11 @@ def get_flashcard_input
 end                                       # and the user input is the 'value' of the hash
 
 def get_explaination
-  puts "Please write an explaination : "                     # Asks the user for input
+  puts "\n Please write an explaination : "                     # Asks the user for input
   print "> "
   get_flashcard_input()                                      # Evaluates input to check if user wants help, to skip, or quit 
-  puts "Your explaination should be something like... \n",   # Provides an example explainations
-       " -> #{@aQuestion[2]}"
+  puts "\n Your explaination should be something like... \n",   # Provides an example explainations
+       "\n -> #{@aQuestion[2]}"
   self_correct()                                             # Give the user a chance to self-correct
 end
 
@@ -261,7 +287,7 @@ def self_correct
   print "\n", "correct?  y / n   > "                     # Asks the user if his/her answer was correct
   self_correct = gets.chomp                                  # Receives the user input
   if self_correct == 'y'                                     # And evaluates
-    puts "good job! \n"                                      # Print 'good job' 
+    puts "good job! \n \n"                                      # Print 'good job' 
     @correct += 1                                            # Increase correct counter by 1
   elsif self_correct == 'n'
     @one_test.push(@aQuestion)                               # If 'n' question pushed back into the test
