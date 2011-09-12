@@ -127,8 +127,6 @@ All_the_tests = [
 ]
 
 class Multiple_Choice_Test
-
-    
   def choose_a_test                                               
     puts 'Do you want the (H)TML, (S)YMBOLS, or (R)EGEXP test?'
     print '> '
@@ -205,7 +203,7 @@ INFO
     if @input == 'quit'                     # Allows user to exit
       finish_test()                         
     elsif @input == 'skip'                  # Allows user to skip the question
-      @name.grab_many_question  # Goes back a grabs a new question
+      @name.grab_many_question              # Goes back a grabs a new question
     else 
       return @input
     end
@@ -222,7 +220,6 @@ INFO
   end
 
   def finish_test
-                                                    # Decreases the number counter by one so last question is iqnored
     results = "Finished - You got #{$correct} out of #{$n} answers right!"
     puts results                                               # Results are printed for the user
     Process.exit!(0)                                         # Multiple-Choice users are exited from the program
